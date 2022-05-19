@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="28bf1097166645d088d34e66584c7a9d" Name="Diagram1">
+        <EntityTypeShape EntityType="upModel.Client" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.order" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.personal" Width="1.5" PointX="8" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.PO" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.role" Width="1.5" PointX="5.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.users" Width="1.5" PointX="3.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="upModel.Processing" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <AssociationConnector Association="upModel.FK_order_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_Processing_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_users_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_order_PO" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_Processing_order" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_personal_role" ManuallyRouted="false" />
+        <AssociationConnector Association="upModel.FK_users_role" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

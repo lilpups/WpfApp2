@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище upModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="firstname" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="middlename" Type="nchar" MaxLength="20" />
+          <Property Name="lastname" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="type" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="idPO" Type="int" Nullable="false" />
+          <Property Name="idClient" Type="int" Nullable="false" />
+          <Property Name="price" Type="real" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="personal">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="firstname" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="middlename" Type="nchar" MaxLength="10" />
+          <Property Name="lastname" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="idrole" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="PO" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="warranty" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "up.dbo.Processing" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="Processing">
+          <Key>
+            <PropertyRef Name="idOrder" />
+            <PropertyRef Name="Datemovement" />
+            <PropertyRef Name="idClient" />
+            <PropertyRef Name="typemovement" />
+            <PropertyRef Name="keys" />
+          </Key>
+          <Property Name="idOrder" Type="int" Nullable="false" />
+          <Property Name="Datemovement" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="idClient" Type="int" Nullable="false" />
+          <Property Name="typemovement" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="keys" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="role" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="login" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="idClient" Type="int" Nullable="false" />
+          <Property Name="idrole" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_order_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_PO">
+          <End Role="PO" Type="Self.PO" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PO">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_personal_role">
+          <End Role="role" Type="Self.role" Multiplicity="1" />
+          <End Role="personal" Type="Self.personal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="personal">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processing_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processing_order">
+          <End Role="order" Type="Self.order" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="idOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_role">
+          <End Role="role" Type="Self.role" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище upModelContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="personal" EntityType="Self.personal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO" EntityType="Self.PO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Processing" EntityType="Self.Processing" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Processing].[idOrder] AS [idOrder], 
+    [Processing].[Datemovement] AS [Datemovement], 
+    [Processing].[idClient] AS [idClient], 
+    [Processing].[typemovement] AS [typemovement], 
+    [Processing].[keys] AS [keys]
+    FROM [dbo].[Processing] AS [Processing]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_order_Client" Association="Self.FK_order_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_PO" Association="Self.FK_order_PO">
+            <End Role="PO" EntitySet="PO" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_personal_role" Association="Self.FK_personal_role">
+            <End Role="role" EntitySet="role" />
+            <End Role="personal" EntitySet="personal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processing_Client" Association="Self.FK_Processing_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processing_order" Association="Self.FK_Processing_order">
+            <End Role="order" EntitySet="order" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_Client" Association="Self.FK_users_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_role" Association="Self.FK_users_role">
+            <End Role="role" EntitySet="role" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="upModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="middlename" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_Client" FromRole="Client" ToRole="order" />
+          <NavigationProperty Name="Processing" Relationship="Self.FK_Processing_Client" FromRole="Client" ToRole="Processing" />
+          <NavigationProperty Name="users" Relationship="Self.FK_users_Client" FromRole="Client" ToRole="users" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="idPO" Type="Int32" Nullable="false" />
+          <Property Name="idClient" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Single" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_order_Client" FromRole="order" ToRole="Client" />
+          <NavigationProperty Name="PO" Relationship="Self.FK_order_PO" FromRole="order" ToRole="PO" />
+          <NavigationProperty Name="Processing" Relationship="Self.FK_Processing_order" FromRole="order" ToRole="Processing" />
+        </EntityType>
+        <EntityType Name="personal">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="middlename" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="idrole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="role" Relationship="Self.FK_personal_role" FromRole="personal" ToRole="role" />
+        </EntityType>
+        <EntityType Name="PO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="PO1" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="warranty" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_PO" FromRole="PO" ToRole="order" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="role1" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="personal" Relationship="Self.FK_personal_role" FromRole="role" ToRole="personal" />
+          <NavigationProperty Name="users" Relationship="upModel.FK_users_role" FromRole="role" ToRole="users" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="idClient" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_users_Client" FromRole="users" ToRole="Client" />
+          <Property Name="idrole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="role" Relationship="upModel.FK_users_role" FromRole="users" ToRole="role" />
+        </EntityType>
+        <EntityType Name="Processing">
+          <Key>
+            <PropertyRef Name="idOrder" />
+            <PropertyRef Name="Datemovement" />
+            <PropertyRef Name="idClient" />
+            <PropertyRef Name="typemovement" />
+            <PropertyRef Name="keys" />
+          </Key>
+          <Property Name="idOrder" Type="Int32" Nullable="false" />
+          <Property Name="Datemovement" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="idClient" Type="Int32" Nullable="false" />
+          <Property Name="typemovement" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="keys" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Processing_Client" FromRole="Processing" ToRole="Client" />
+          <NavigationProperty Name="order" Relationship="Self.FK_Processing_order" FromRole="Processing" ToRole="order" />
+        </EntityType>
+        <Association Name="FK_order_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processing_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="idClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_PO">
+          <End Role="PO" Type="Self.PO" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PO">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Processing_order">
+          <End Role="order" Type="Self.order" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="idOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_personal_role">
+          <End Role="role" Type="Self.role" Multiplicity="1" />
+          <End Role="personal" Type="Self.personal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="personal">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="order" EntityType="Self.order" />
+          <EntitySet Name="personal" EntityType="Self.personal" />
+          <EntitySet Name="PO" EntityType="Self.PO" />
+          <EntitySet Name="role" EntityType="Self.role" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <EntitySet Name="Processing" EntityType="Self.Processing" />
+          <AssociationSet Name="FK_order_Client" Association="Self.FK_order_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processing_Client" Association="Self.FK_Processing_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_Client" Association="Self.FK_users_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_PO" Association="Self.FK_order_PO">
+            <End Role="PO" EntitySet="PO" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Processing_order" Association="Self.FK_Processing_order">
+            <End Role="order" EntitySet="order" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_personal_role" Association="Self.FK_personal_role">
+            <End Role="role" EntitySet="role" />
+            <End Role="personal" EntitySet="personal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_role" Association="upModel.FK_users_role">
+            <End Role="role" EntitySet="role" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_users_role">
+          <End Type="upModel.role" Role="role" Multiplicity="1" />
+          <End Type="upModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище upModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="upModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="middlename" ColumnName="middlename" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order">
+            <EntityTypeMapping TypeName="upModel.order">
+              <MappingFragment StoreEntitySet="order">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idPO" ColumnName="idPO" />
+                <ScalarProperty Name="idClient" ColumnName="idClient" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="personal">
+            <EntityTypeMapping TypeName="upModel.personal">
+              <MappingFragment StoreEntitySet="personal">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="middlename" ColumnName="middlename" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="idrole" ColumnName="idrole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PO">
+            <EntityTypeMapping TypeName="upModel.PO">
+              <MappingFragment StoreEntitySet="PO">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="PO1" ColumnName="PO" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="warranty" ColumnName="warranty" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role">
+            <EntityTypeMapping TypeName="upModel.role">
+              <MappingFragment StoreEntitySet="role">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="role1" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="upModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="upModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="idrole" ColumnName="idrole" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="idClient" ColumnName="idClient" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Processing">
+            <EntityTypeMapping TypeName="upModel.Processing">
+              <MappingFragment StoreEntitySet="Processing">
+                <ScalarProperty Name="idOrder" ColumnName="idOrder" />
+                <ScalarProperty Name="Datemovement" ColumnName="Datemovement" />
+                <ScalarProperty Name="idClient" ColumnName="idClient" />
+                <ScalarProperty Name="typemovement" ColumnName="typemovement" />
+                <ScalarProperty Name="keys" ColumnName="keys" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
